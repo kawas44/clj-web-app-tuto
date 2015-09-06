@@ -16,22 +16,33 @@
   sc/Lifecycle
 
   (start [this]
-    (println (format "Starting HTTP server on %s:%s" host port))
-    (assoc this :httpserver (start-http-server app host port)))
+    (if-let [_ (get this :httpserver)]
+      (do
+        (println "HTTP server already running!")
+        this)
+      (do
+        (println (format "Starting HTTP server on %s:%s" host port))
+        (assoc this :httpserver (start-http-server app host port)))))
 
   (stop [this]
-    (println "Stoping HTTP server")
-    (let [stop-httpserver-fn (get this :httpserver (constantly nil))]
-      (stop-httpserver-fn))
-    (assoc this :httpserver nil)))
+    (if-let [stop-httpserver-fn (get this :httpserver)]
+      (do
+        (println "Stopping HTTP server")
+        (stop-httpserver-fn)
+        (assoc this :httpserver nil))
+      (do
+        (println "HTTP server not running!")
+        this))))
 
 
 (defrecord TutoCore [httpserver]
   sc/Lifecycle
   (start [this]
-    (println "Staring TutoCore"))
+    (println "Staring TutoCore")
+    this)
   (stop [this]
-    (println "Stopping TutoCore")))
+    (println "Stopping TutoCore")
+    this))
 
 
 (defn create-system []
