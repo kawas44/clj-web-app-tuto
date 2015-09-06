@@ -1,6 +1,6 @@
-(ns clj-web-app-tuto.core-test
+(ns webapp-tuto.core-test
   (:require [clojure.test :refer :all]
-            [clj-web-app-tuto.core :refer :all]))
+            [webapp-tuto.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

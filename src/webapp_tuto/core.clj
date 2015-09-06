@@ -1,4 +1,4 @@
-(ns clj-web-app-tuto.core)
+(ns webapp-tuto.core)
 
 (defn foo
   "I don't do a whole lot."
