@@ -10,7 +10,7 @@
 
 
 (defn- start-http-server [handler host port]
-  (hks/run-server app {:ip host :port port}))
+  (hks/run-server handler {:ip host :port port}))
 
 (defrecord HTTPServer [host port]
   sc/Lifecycle
