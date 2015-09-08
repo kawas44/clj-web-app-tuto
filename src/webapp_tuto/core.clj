@@ -22,7 +22,7 @@
         this)
       (do
         (println (format "Starting HTTP server on %s:%s" host port))
-        (assoc this :httpserver (start-http-server app host port)))))
+        (assoc this :httpserver (start-http-server #'app host port)))))
 
   (stop [this]
     (if-let [stop-httpserver-fn (get this :httpserver)]
