@@ -1,12 +1,7 @@
 (ns webapp-tuto.core
   (:require [com.stuartsierra.component :as sc]
-            [org.httpkit.server :as hks]))
-
-
-(defn app [req]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body "Hello HTTP-KIT!"})
+            [org.httpkit.server :as hks]
+            [webapp-tuto.web :refer [app]]))
 
 
 (defn- start-http-server [handler host port]
