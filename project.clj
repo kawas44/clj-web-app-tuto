@@ -6,6 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [http-kit "2.1.18"]
+                 [ring/ring-defaults "0.1.5"]
                  [compojure "1.4.0"]
                  [com.stuartsierra/component "0.2.3"]]
 

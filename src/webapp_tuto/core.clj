@@ -1,7 +1,7 @@
 (ns webapp-tuto.core
   (:require [com.stuartsierra.component :as component]
             [org.httpkit.server :as hkit]
-            [webapp-tuto.web :refer [app]]))
+            [webapp-tuto.web :refer [site]]))
 
 (defn- start-http-server [handler host port]
   (hkit/run-server handler {:ip host :port port}))
@@ -16,7 +16,7 @@
         this)
       (do
         (println (format "Starting HTTP server on %s:%s" host port))
-        (assoc this :httpserver (start-http-server #'app host port)))))
+        (assoc this :httpserver (start-http-server #'site host port)))))
 
   (stop [this]
     (if-let [stop-httpserver-fn (get this :httpserver)]
