@@ -1,14 +1,13 @@
 (ns webapp-tuto.core
-  (:require [com.stuartsierra.component :as sc]
-            [org.httpkit.server :as hks]
+  (:require [com.stuartsierra.component :as component]
+            [org.httpkit.server :as hkit]
             [webapp-tuto.web :refer [app]]))
 
-
 (defn- start-http-server [handler host port]
-  (hks/run-server handler {:ip host :port port}))
+  (hkit/run-server handler {:ip host :port port}))
 
 (defrecord HTTPServer [host port]
-  sc/Lifecycle
+  component/Lifecycle
 
   (start [this]
     (if-let [_ (get this :httpserver)]
@@ -29,24 +28,21 @@
         (println "HTTP server not running!")
         this))))
 
-
 (defrecord TutoCore [httpserver]
-  sc/Lifecycle
+  component/Lifecycle
   (start [this]
-    (println "Staring TutoCore")
+    (println "Starting TutoCore")
     this)
   (stop [this]
     (println "Stopping TutoCore")
     this))
 
-
 (defn create-system []
-  (sc/system-map
-    :httpserver (->HTTPServer "localhost" 8000)
-    :app (sc/using
-           (map->TutoCore {})
-           [:httpserver])))
-
+  (component/system-map
+   :httpserver (->HTTPServer "localhost" 8000)
+   :app (component/using
+         (map->TutoCore {})
+         [:httpserver])))
 
 (defn -main [& args]
   (.start (create-system)))
