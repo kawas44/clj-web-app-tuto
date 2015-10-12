@@ -8,6 +8,7 @@
                  [http-kit "2.1.18"]
                  [ring/ring-defaults "0.1.5"]
                  [compojure "1.4.0"]
+                 [enlive "1.1.6"]
                  [com.stuartsierra/component "0.2.3"]]
 
   :profiles {:dev {:plugins [[lein-pprint "1.1.2"]]
