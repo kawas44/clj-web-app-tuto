@@ -4,7 +4,8 @@
             [ring.middleware.defaults :as rdefaults]
             [ring.util.anti-forgery :as af]
             [ring.util.response :as ur]
-            [net.cgrand.enlive-html :as html]))
+            [net.cgrand.enlive-html :as html]
+            [webapp-tuto.urls :as urls]))
 
 (defn index-page [request]
   {:status 200
@@ -31,7 +32,15 @@
   (let [url (get (:params request) :url-input)]
     (if (empty? url)
       (ur/redirect "/new?error=1")
-      (str "DO SHRINK: " url "<br> <pre>" (with-out-str (pprint request)) "</pre>"))))
+      (do
+        (let [shorter (urls/shorten-url url)]
+          (ur/redirect (str "/new-success?short=" shorter)))))))
+
+(defn shrink-success-page [request]
+  (pprint request)
+  (as-> (:query-params request) $
+        (get $ "short")
+        (str "You can now use this URL: " $)))
 
 (defn redirect-action [request]
   (let [surl (get (:params request) :surl)]
@@ -41,6 +50,7 @@
   (GET "/" [] #'index-page)
   (GET "/new" [] #'shrink-page)
   (POST "/new" [] #'do-shrink)
+  (GET "/new-success" [] #'shrink-success-page)
   (GET "/:surl" [surl] #'redirect-action))
 
 (def site
