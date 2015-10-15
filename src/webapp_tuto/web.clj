@@ -3,6 +3,7 @@
             [compojure.core :refer [GET POST defroutes]]
             [ring.middleware.defaults :as rdefaults]
             [ring.util.anti-forgery :as af]
+            [ring.util.response :as ur]
             [net.cgrand.enlive-html :as html]))
 
 (defn index-page [request]
@@ -14,15 +15,23 @@
           "</pre>")})
 
 (html/deftemplate new-form-template "templates/new-form.html"
-  []
-  [:#__anti-forgery-token] (html/html-content (af/anti-forgery-field)))
+  [params]
+  [:#__anti-forgery-token] (html/substitute
+                            (html/html-snippet
+                             (af/anti-forgery-field)))
+  [:#shorten-url-form] (html/set-attr :action "/new")
+  [:#shorten-url-form :.url-form-error] (if (get params "error")
+                                          (html/remove-class "hidden")
+                                          identity))
 
 (defn shrink-page [request]
-  (new-form-template))
+  (new-form-template (:query-params request)))
 
 (defn do-shrink [request]
   (let [url (get (:params request) :url-input)]
-    (str "DO SHRINK: " url "<br> <pre>" (with-out-str (pprint request)) "</pre>")))
+    (if (empty? url)
+      (ur/redirect "/new?error=1")
+      (str "DO SHRINK: " url "<br> <pre>" (with-out-str (pprint request)) "</pre>"))))
 
 (defn redirect-action [request]
   (let [surl (get (:params request) :surl)]
@@ -30,8 +39,8 @@
 
 (defroutes app
   (GET "/" [] #'index-page)
-  (GET "/shrink" [] #'shrink-page)
-  (POST "/shrink" [] #'do-shrink)
+  (GET "/new" [] #'shrink-page)
+  (POST "/new" [] #'do-shrink)
   (GET "/:surl" [surl] #'redirect-action))
 
 (def site

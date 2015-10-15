@@ -2,15 +2,24 @@
 <html>
     <head>
         <title>Shrink some URL</title>
+        <style>
+            .url-form-error {
+                color:red;
+                font-style: italic;
+                font-size: 0.8em;
+            }
+            .hidden {
+                visibility: hidden;
+            }
+
+        </style>
     </head>
     <body>
         <h1>Shrink it here</h1>
-        <form action="/shrink" method="POST">
-            <input
-              id="url-input"
-              name="url-input"
-              type="text"
+        <form id="shorten-url-form" action="/xxxx" method="POST">
+            <input id="url-input" name="url-input" type="text"
               placeholder="Paste url here" />
+            <span class="url-form-error hidden">Invalid url</span>
             <input id="__anti-forgery-token" type="hidden" value="xxxx" />
         </form>
 
