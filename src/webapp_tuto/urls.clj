@@ -1,5 +1,4 @@
-(ns webapp-tuto.urls
-  (:require [clojure.pprint :refer [pprint]]))
+(ns webapp-tuto.urls)
 
 (defonce ^:private repository (atom {}))
 

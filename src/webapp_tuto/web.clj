@@ -37,7 +37,6 @@
           (ur/redirect (str "/new-success?short=" shorter)))))))
 
 (defn shrink-success-page [request]
-  (pprint request)
   (as-> (:query-params request) $
         (get $ "short")
         (str "You can now use this URL: " $)))
